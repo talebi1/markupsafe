@@ -52,30 +52,5 @@ def show_message(*lines):
     print("=" * 74)
 
 
-supports_speedups = platform.python_implementation() not in {"PyPy", "Jython"}
-
-if os.environ.get("CIBUILDWHEEL", "0") == "1" and supports_speedups:
-    run_setup(True)
-elif supports_speedups:
-    try:
-        run_setup(True)
-    except BuildFailed:
-        show_message(
-            "WARNING: The C extension could not be compiled, speedups"
-            " are not enabled.",
-            "Failure information, if any, is above.",
-            "Retrying the build without the C extension now.",
-        )
-        run_setup(False)
-        show_message(
-            "WARNING: The C extension could not be compiled, speedups"
-            " are not enabled.",
-            "Plain-Python build succeeded.",
-        )
-else:
-    run_setup(False)
-    show_message(
-        "WARNING: C extensions are not supported on this Python"
-        " platform, speedups are not enabled.",
-        "Plain-Python build succeeded.",
-    )
+run_setup(False)
+show_message("WARNING: platform, speedups are not enabled.")
